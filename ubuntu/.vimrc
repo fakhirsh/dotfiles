@@ -124,7 +124,7 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
-set mouse=a
+"set mouse=a
 
 set background=dark
 colorscheme PaperColor

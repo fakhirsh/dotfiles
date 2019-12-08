@@ -1,0 +1,5 @@
+# Get info such as class name about any window:
+xprop
+
+# System infor such as CPU, MEM etc:
+top / htop

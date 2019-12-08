@@ -176,6 +176,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 
+
+
 ## Window colors
 #set $back                #1d1F21
 #set $text-color          #282A2E
@@ -238,5 +240,5 @@ bindsym $mod+Shift+x        gaps inner current minus 5
 exec_always --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpapers/*
 
 # Default config file is inside ~/.config/ folder:
-exec --no-startup-id compton
+exec --no-startup-id compton -b > /dev/null 2>&1
 #exec --no-startup-id compton --config ~/.config/i3/compton.conf
