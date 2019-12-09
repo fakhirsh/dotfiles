@@ -238,6 +238,8 @@ bindsym $mod+Shift+x        gaps inner current minus 5
 
 # Change a random wallpeper at each startup:
 exec_always --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpapers/*
+#exec_always --no-startup-id feh --bg-scale --no-xinerama ~/Pictures/Wallpapers/multiscreen/187559.jpg
+
 
 # Default config file is inside ~/.config/ folder:
 exec --no-startup-id compton -b > /dev/null 2>&1
