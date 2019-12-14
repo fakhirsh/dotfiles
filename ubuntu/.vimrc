@@ -33,8 +33,8 @@ Plugin 'xuyuanp/nerdtree-git-plugin'    "Git plugin for Nerdtree
 "Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 "Plugin 'tpope/vim-repeat'               " Remaps the '.' to work (i.e repeat) on other pluguns.
 "Plugin 'glts/vim-radical'               " Changes the base of a number dec,hex,oct,bin
-Plugin 'ReplaceWithRegister'             " Replaces current text with contents of a register
-Plugin 'easymotion/vim-easymotion'
+"Plugin 'ReplaceWithRegister'             " Replaces current text with contents of a register
+"Plugin 'easymotion/vim-easymotion'
 Plugin 'kien/ctrlp.vim'
 "Plugin 'brookhong/cscope.vim'          "For navigating large code bases
                                         "Tutorial: http://cscope.sourceforge.net/large_projects.html
@@ -49,15 +49,15 @@ Plugin 'valloric/youcompleteme'
                                          "Tutorial: https://www.youtube.com/watch?v=gnupOrSEikQ
 
 "--- C++ (and other languages) ---
-Plugin 'tpope/vim-surround'             " All about surrounding \", \', ({[ and much more
+"Plugin 'tpope/vim-surround'             " All about surrounding \", \', ({[ and much more
 "Plugin 'scrooloose/syntastic'
 "Plugin 'tpope/vim-commentary'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'yggdroot/indentline'
-Plugin 'chiel92/vim-autoformat'
+"Plugin 'yggdroot/indentline'
+"Plugin 'chiel92/vim-autoformat'
 "Plugin 'kien/rainbow_parentheses.vim'
 "Plugin 'puremourning/vimspector'
-Plugin 'godlygeek/tabular'
+"Plugin 'godlygeek/tabular'
 "Plugin 'junegunn/vim-easy-align'
 "Plugin 'ervandew/supertab'
 Plugin 'octol/vim-cpp-enhanced-highlight'
@@ -69,7 +69,7 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 "Plugin 'honza/vim-snippets'     "Snippets
 Plugin 'sirver/ultisnips'        " Snippets
 "Plugin 'taglist.vim'            "source code browser plugin for Vim
-Plugin 'majutsushi/tagbar'       "A class outline viewer for Vim (IMHO better one)
+"Plugin 'majutsushi/tagbar'       "A class outline viewer for Vim (IMHO better one)
 "Plugin 'libclang-vim/vim-textobj-clang'    " This was giving errors when enabled
 "Plugin 'bps/vim-textobj-python'
 
@@ -197,6 +197,9 @@ autocmd Filetype tex setl updatetime=1
 let g:livepreview_previewer = 'evince'
 "let g:livepreview_engine = 'your_engine' . ' [options]'
 "let g:livepreview_cursorhold_recompile = 0
+
+" IMPORTANT: You must run 'LLPStartPreview' command within vim to 
+"             activate latex live preview
 
 "--------------------------------------------------------------------
 
