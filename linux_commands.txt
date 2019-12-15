@@ -1,16 +1,37 @@
 # Get info such as class name about any window:
 xprop
 
+#----------------------------------------------------------
 
 # System infor such as CPU, MEM etc:
 top / htop
 
+#----------------------------------------------------------
 
 # Know which window manager is running:
  wmctrl -m
-# OR:
+## OR:
 printf 'Desktop: %s\nSession: %s\n' "$XDG_CURRENT_DESKTOP" "$GDMSESSION"
 
+#----------------------------------------------------------
 
 # Speed test:
 speedtest-cli
+
+#----------------------------------------------------------
+
+# Play sounds from command line (very lightweight tools):
+
+## The built-in ALSA system for playing standard wav files:
+aplay something.wav
+
+## The sox library:
+
+sudo apt install sox
+sudo apt install libsox-fmt-mp3
+ #sudo apt install libsox-fmt-all  // all format support
+$ play something.mp3
+$ play something.wav
+
+#----------------------------------------------------------
+
