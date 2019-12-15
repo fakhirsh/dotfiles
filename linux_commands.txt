@@ -1,5 +1,16 @@
 # Get info such as class name about any window:
 xprop
 
+
 # System infor such as CPU, MEM etc:
 top / htop
+
+
+# Know which window manager is running:
+ wmctrl -m
+# OR:
+printf 'Desktop: %s\nSession: %s\n' "$XDG_CURRENT_DESKTOP" "$GDMSESSION"
+
+
+# Speed test:
+speedtest-cli
