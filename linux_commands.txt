@@ -25,13 +25,19 @@ speedtest-cli
 ## The built-in ALSA system for playing standard wav files:
 aplay something.wav
 
-## The sox library:
 
+## The sox library:
 sudo apt install sox
 sudo apt install libsox-fmt-mp3
  #sudo apt install libsox-fmt-all  // all format support
 $ play something.mp3
 $ play something.wav
+
+## On Ubuntu, PulseAudio sound server:
+cat rawsound | /dev/pcsp
+
+## Send RAW sound data directly to the speakers:
+cat rawsound | /dev/pcsp
 
 #----------------------------------------------------------
 

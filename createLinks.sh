@@ -1,13 +1,10 @@
 #!/bin/sh
 
-echo "Creating Ubuntu Hard Links..."
+echo "Creating Hard Links..."
 echo "-----------------------------"
 
-mkdir ubuntu 2> /dev/null # supressing errors/warnings
-cd ubuntu
-
 echo "Creating .vimrc hard link"
-ln ~/.vimrc .vimrc 2> /dev/null
+ln ~/.vimrc .vimrc 2> /dev/null       # supressing errors/warnings
 echo "Creating .i3status.conf hard link"
 ln ~/.i3status.conf .i3status.conf 2> /dev/null
 
