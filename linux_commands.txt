@@ -41,3 +41,65 @@ cat rawsound | /dev/pcsp
 
 #----------------------------------------------------------
 
+# View OpenGL details:
+
+glxinfo
+
+glxinfo | grep render
+
+#----------------------------------------------------------
+
+# View CPU details: (such as how many Mhz it is running on)
+## My CPU was running underclocked (500 MHz) at that time:
+
+lscpu
+
+cat /proc/cpuinfo | grep MHz
+
+#.......................
+
+# How to use cpufrequtils
+#  http://www.thinkwiki.org/wiki/How_to_use_cpufrequtils
+sudo apt install cpufrequtils
+cpufreq-info
+cpufreq-set
+
+# CPU temperature:
+sudo apt install lm-sensors 
+# IMPORTANT: For the first time after install, run:
+sudo sensors-detect
+# then you will be able to use:
+sensors    # NOT working on Ubuntu
+# OR:
+watch sensors
+
+#.......................
+
+# HDD temperature:
+sudo apt install hddtemp
+
+sudo hddtemp /dev/sda
+
+#----------------------------------------------------------
+
+# Suspend :
+systemctl suspend
+
+# Suspend on lid dowd:
+# https://www.click4infos.com/how-to-configure-ubuntu-to-shut-down-and-hibernate-when-the-lid-is-closed/
+
+
+# Hybernate:
+systemctl hybernate
+
+#----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
