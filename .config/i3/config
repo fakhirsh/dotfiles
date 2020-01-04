@@ -30,6 +30,11 @@ font pango:monospace 8
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+
+bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10 # decrease screen brightness
+
+
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
@@ -219,7 +224,7 @@ bar {
 
 #---------------------------------------------------------------------------
 # Auto start screen locker with 5 minutes of no activity:
-#exec_always --no-startup-id xautolock -time 5 -locker i3lock -c 000000
+exec --no-startup-id xautolock -time 5 -locker i3lock -c 000000
 
 #---------------------------------------------------------------------------
 
@@ -232,8 +237,6 @@ bindsym Control+mod1+l exec i3lock -c 000000
 # Shift + Alt + f to open up the Ubuntu's default file manager
 bindsym Shift+mod1+f exec nautilus
 
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase screen brightness
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10 # decrease screen brightness
 
 #bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+  # increase volume
 #bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%-  # decrease volume
