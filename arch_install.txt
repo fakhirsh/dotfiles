@@ -1,0 +1,241 @@
+Following the official guide:
+-----------------------------
+https://wiki.archlinux.org/index.php/Installation_guide
+
+=========================================================================
+
+Step 1:
+------
+--- Make sure network interfaces are listed:
+    > ip link
+
+--- Make sure internet is working:
+    > ping archlinux.org
+
+
+Step 2:
+------
+--- Update system clock:
+    > timedatectl set-ntp true
+
+
+Step 3:
+------
+Partition the disks: (2 partitions, i.e boot + root. We will sreate a SWAP file later)
+
+--- Verify name of the SSD:
+    > lsblk
+    > lsblk -Sp
+
+--- Launch fdisk on SSD:
+    > fdisk /dev/sda
+
+    * press 'p' to list all partitions
+    * delete all existing partitions
+
+    * create boot partition:
+    > n
+    > (enter)
+    > (enter)
+    > (enter)
+    > +200M
+    > (remove existing signatures if asked)
+
+    * create root partition:
+    > n
+    > (enter)
+    > (enter)
+    > (enter)
+    > (enter)     {or enter a custom size such as +110G}
+    > (remove existing signatures if asked)
+
+    * save changes:
+    > w
+
+--- Format the  boot partition:
+    > mksf.ext4 -L boot /dev/sda1
+   
+--- Setup encryption on the root partition:
+    > cryptsetup -vy luksFormat --type luks2 /dev/sda2
+    > YES
+    > (type paraphrase)
+
+    --- Unlock encrypted partition:
+        > cryptsetup open /dev/sda2 luks    # 'luks' is just an arbitrary label of your choice
+        > (type paraphrase)
+    
+    --- Create a physical volume:
+        > pvcreate /dev/mapper/luks
+
+    --- Create volume group:
+        > vgcreate vg /dev/mapper/luks
+
+    --- Create logical volume(s): [we only have one "root" partition for now]
+        > lvcreate -l 100%FREE vg -n root
+
+        > vgscan
+        > vgchange -ay
+
+    --- Format the unlocked root partition:
+        > mkfs.ext4 -L root /dev/vg/root
+    
+
+Step 4:
+------
+
+--- Mount partitions:
+    > mkdir /mnt/boot
+    > mount /dev/sda1 /mnt/boot
+    > mount /dev/vg/root /mnt
+
+
+Step 5:
+------
+
+--- Install arch linux:
+    > pacstrap /mnt base base-devel linux linux-firmware vim
+
+
+Step 6:
+------
+
+--- Generate file system table:
+    > genfstab -p -U /mnt >> /mnt/etc/fstab
+
+
+Step 7:
+------
+--- Change to root:
+    > arch-chroot /mnt
+
+
+Step 8:
+------
+
+--- Set time zone:
+    > ln -sf /usr/share/zoneinfo/Asia/Karachi /etc/localtime
+    > hwclock --systohc
+    > timedatectl set-timezone Asia/Karachi
+
+--- Set localization: Uncomment en_US.UTF-8 UTF-8 and other needed locales in /etc/locale.gen, and generate them with:
+    > locale-gen
+
+--- Create the locale.conf(5) file, and set the LANG variable accordingly: 
+    > echo LANG=en_US.UTF-8 > /etc/locale.conf
+    > export LANG=en_US.UTF-8
+
+
+
+Step 9: (Setup GRUB)
+------
+
+--- Install GRUB:
+    > pacman -S grub
+
+--- Edit /etc/default/grub:
+    > vim /etc/default/grub
+    
+    --- Change line 6 as follows:
+    > GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda2:luks root=/dev/mapper/vg-root"
+
+
+    --- Change line 52 in /etc/mkinitcpio.conf as follows. Add encrypt and lvm2 between blocks and filesystem:
+        > HOOKS=(base udev autodetect modconf block encrypt lvm2 filesystems keyboard fsck)
+
+    --- Install lvm2 :
+        > pacman -S lvm2
+
+    --- Run:
+        > mkinitcpio -p linux
+
+--- Install grub on the SDD:
+    > grub-install --recheck /dev/sda
+
+--- Make grub config file:
+    > grub-mkconfig -o /boot/grub/grub.cfg
+
+
+Step 10:
+-------
+--- Add user and assign password:
+    > useradd -m -g wheel fakhir
+    > passwd fakhir
+
+--- Add fakhir to super users. Edit /etc/sudoers file using visudo:
+    > visudo
+    * Uncomment the following line:
+    > # %wheel ALL=(ALL) ALL
+
+--- Set a root password:
+    > passwd
+
+
+Step 11: (Swap file)
+-------
+
+--- Create a swap file:
+    > fallocate -l 8G /swapfile
+    
+    --- Change permisions:
+        > chmod 600 /swapfile
+
+    --- Asign it as a swap file:
+        > mkswap /swapfile
+
+    --- Add into file systemtable:
+        >  echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
+
+
+
+
+Step 12: (Network Configuration)
+-------
+
+--- Create hostname file:
+    > echo atom > /etc/hostname
+
+--- Edit /etc/hosts file as instructed on the official arch installation page.
+
+--- Install network manager:
+    > pacman -S networkmanager
+    
+--- Enable network interfaces at startup automatically:
+    > systemctl enable NetworkManager
+
+
+
+Step 13:
+------- 
+
+    > exit
+    > umount -a
+    > reboot
+
+
+Step 14: (Graphical User Interface)
+-------
+
+--- Install packages:
+    > pacman -S xorg i3-wm xorg-xinit dmenu rofi rxvt-unicode ttf-djvu
+
+--- Initialize .xinitrc file to load i3 whenever you type 'startx':
+    > echo exec i3 > .xinitrc
+
+--- Automatically start GUI by adding startx command to .bashrc:
+    > echo startx >> .bashrc
+
+--- Start GUI:
+    > startx
+
+
+=======================================================================
+=======================================================================
+=======================================================================
+
+Post Installation Settings:
+---------------------------
+
+
+
+
+
