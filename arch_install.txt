@@ -216,7 +216,7 @@ Step 14: (Graphical User Interface)
 -------
 
 --- Install packages:
-    > pacman -S xorg i3-wm xorg-xinit dmenu rofi rxvt-unicode ttf-djvu
+    > pacman -S xorg i3-wm i3status xorg-xinit dmenu rofi rxvt-unicode ttf-djvu 
 
 --- Initialize .xinitrc file to load i3 whenever you type 'startx':
     > echo exec i3 > .xinitrc
@@ -235,6 +235,14 @@ Step 14: (Graphical User Interface)
 Post Installation Settings:
 ---------------------------
 
+--- Enable Audio:
+  |--- By default audio ports are disabled.
+       > sudo pacman -S alsa-utils
+       Then run alsamixer. Un-mute channels using (m) key
+       https://www.youtube.com/watch?v=3cuuLQ19WTA
+       
+  
+  
 
 
 
