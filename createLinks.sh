@@ -20,5 +20,18 @@ cd i3
 echo "Creating i3/config hard link"
 ln ~/.config/i3/config config 2> /dev/null
 
+cd ..
+cd ..
+
+echo "Creating XBindKeys hard link"
+ln ~/.xbindkeysrc .xbindkeysrc 2> /dev/null
+
+echo "Creating .xinitrc hard link"
+ln ~/.xinitrc .xinitrc 2> /dev/null
+
+echo "Creating XRandr Screen Layout hard link"
+mkdir .screenlayout 2> /dev/null
+cd .screenlayout
+ln ~/.screenlayout/mylayout.sh mylayout.sh 2> /dev/null
 
 echo "Done..."

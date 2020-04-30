@@ -19,6 +19,7 @@ Plugin 'tpope/vim-fugitive'
  "Plugin 'L9'
 
 "--- Visual Look ---
+Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 "Plugin 'ryanoasis/vim-devicons'         "Cool custom icons for Vim
@@ -43,7 +44,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
 
 "--- Code completion ---
-Plugin 'valloric/youcompleteme'
+"Plugin 'valloric/youcompleteme'
 "Plugin 'rdnetto/ycm-generator'
 "Plugin 'neoclide/coc.nvim'              " Visual Sudio Code like completion
                                          "Tutorial: https://www.youtube.com/watch?v=gnupOrSEikQ
@@ -67,7 +68,7 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 "Plugin 'severin-lemaignan/vim-minimap'   "Sublime text like preview pannel at
                                              "the left. I didn't like it.
 "Plugin 'honza/vim-snippets'     "Snippets
-Plugin 'sirver/ultisnips'        " Snippets
+"Plugin 'sirver/ultisnips'        " Snippets
 "Plugin 'taglist.vim'            "source code browser plugin for Vim
 "Plugin 'majutsushi/tagbar'       "A class outline viewer for Vim (IMHO better one)
 "Plugin 'libclang-vim/vim-textobj-clang'    " This was giving errors when enabled
@@ -78,8 +79,8 @@ Plugin 'sirver/ultisnips'        " Snippets
 "--- LaTeX stuff ---
 "Plugin 'lervag/vimtex'             "Latex plugin for Vim, I don't know what it
                                     "  exactly does...
-Plugin 'vim-latex/vim-latex'
-Plugin 'xuhdev/vim-latex-live-preview'  "This works fine without any adtional 
+"Plugin 'vim-latex/vim-latex'
+"Plugin 'xuhdev/vim-latex-live-preview'  "This works fine without any adtional 
                                         " Latex plugins
 
 
@@ -118,6 +119,7 @@ autocmd CompleteDone * pclose           " Auto hides the annoying signature
 "---------------------------------------------------------------------------
 
 
+syntax on
 
 set tabstop=4
 set shiftwidth=4
@@ -204,7 +206,7 @@ let g:livepreview_previewer = 'evince'
 "--------------------------------------------------------------------
 
 
-noremap <F10> :cd ~/Temp/cyclicshift/Game/Linux/<CR> :!rm CyclicShift<CR> :cd ../../Temp/Linux<CR> :!cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" ../../Source/Projects/Linux<CR><CR> :!make<CR><CR> :!cp compile_commands.json ../../<CR> :cd ../../Game/Linux<CR> :!./CyclicShift <CR><CR> <BAR> copen<CR>
+"noremap <F10> :cd ~/Temp/cyclicshift/Game/Linux/<CR> :!rm CyclicShift<CR> :cd ../../Temp/Linux<CR> :!cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" ../../Source/Projects/Linux<CR><CR> :!make<CR><CR> :!cp compile_commands.json ../../<CR> :cd ../../Game/Linux<CR> :!./CyclicShift <CR><CR> <BAR> copen<CR>
 
 
-noremap <leader>p :cd ~/Temp/cyclicshift/Game/Linux/<CR> :!rm CyclicShift<CR> :cd ../../Temp/Linux<CR> :!make<CR><CR> :!cp compile_commands.json ../../<CR> :cd ../../Game/Linux<CR> :!./CyclicShift <CR><CR>
+"noremap <leader>p :cd ~/Temp/cyclicshift/Game/Linux/<CR> :!rm CyclicShift<CR> :cd ../../Temp/Linux<CR> :!make<CR><CR> :!cp compile_commands.json ../../<CR> :cd ../../Game/Linux<CR> :!./CyclicShift <CR><CR>
