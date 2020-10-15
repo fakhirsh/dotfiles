@@ -89,11 +89,27 @@ Step 4:
     > mount /dev/vg/root /mnt
 
 
+Step 4.5:
+------
+Ranking mirrors:
+	--- Update mirrors first:
+	   |--- sudo pacman -Sy
+
+	--- Install 'rankmirrors':
+	   |--- sudo pacman -S pacman-contrib
+   
+	--- Backup existing mirror file:
+	   |--- cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+	
+	--- Rank fastest mirrors:
+	   |--- rankmirrors -n 13 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+
+
 Step 5:
 ------
 
 --- Install arch linux:
-    > pacstrap /mnt base base-devel linux linux-firmware vim
+    > pacstrap /mnt base base-devel linux linux-firmware vim git
 
 
 Step 6:
@@ -216,7 +232,7 @@ Step 14: (Graphical User Interface)
 -------
 
 --- Install packages:
-    > pacman -S xorg i3-wm i3status xorg-xinit dmenu rofi rxvt-unicode ttf-djvu 
+    > pacman -S xorg i3-wm i3status xorg-xinit dmenu rofi terminator feh ranger zathura zathura-ps zathra-djvu mutt lynx tmux youtube-dl texlive-bin texlive-core texlive-science texlive-pictures texlive-music cups cups-pdf system-config-printer
 
 --- Initialize .xinitrc file to load i3 whenever you type 'startx':
     > echo exec i3 > .xinitrc
@@ -242,8 +258,8 @@ Post Installation Settings:
        https://www.youtube.com/watch?v=3cuuLQ19WTA
        
   
-  
-
+--- Enable Boot Messages:
+   |--- https://bbs.archlinux.org/viewtopic.php?id=213815
 
 
 
