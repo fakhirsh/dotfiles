@@ -54,80 +54,85 @@ Partition the disks: (2 partitions, i.e boot + root. We will sreate a SWAP file 
 
 --- Format the  boot partition:
     > mksf.ext4 -L boot /dev/sda1
+
+
+
+Step 4:
+------
+
+    (https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system)
+
+--- First, create a temporary encrypted container on the partition to be encrypted: 
+    > cryptsetup open --type plain -d /dev/urandom /dev/<block-device> to_be_wiped
+    
+    --- Verify that it exists:
+        > lsblk
+    
+    --- Wipe the container with zeros:
+        > dd if=/dev/zero of=/dev/mapper/to_be_wiped bs=1M status=progress
+        
+    --- Get the exact container size as root:
+        > blockdev --getsize64 /dev/mapper/to_be_wiped
+        
+    --- Finally, close the temporary container:
+        > cryptsetup close to_be_wiped
+    
+
    
 --- Setup encryption on the root partition:
     > cryptsetup -vy luksFormat --type luks2 /dev/sda2
     > YES
     > (type paraphrase)
-
+    
     --- Unlock encrypted partition:
         > cryptsetup open /dev/sda2 luks    # 'luks' is just an arbitrary label of your choice
         > (type paraphrase)
-    
-    --- Create a physical volume:
-        > pvcreate /dev/mapper/luks
 
-    --- Create volume group:
-        > vgcreate vg /dev/mapper/luks
+    --- After unlocking the partition, it will be available at /dev/mapper/name. Now create a file system of your choice with: 
+        > mkfs.ext4 /dev/mapper/luks
 
-    --- Create logical volume(s): [we only have one "root" partition for now]
-        > lvcreate -l 100%FREE vg -n root
 
-        > vgscan
-        > vgchange -ay
-
-    --- Format the unlocked root partition:
-        > mkfs.ext4 -L root /dev/vg/root
-    
-
-Step 4:
-------
-
---- Mount partitions:
+--- Manually Mount partitions:
     > mkdir /mnt/boot
-    > mount /dev/sda1 /mnt/boot
-    > mount /dev/vg/root /mnt
-
-
-Step 4.5:
-------
-Ranking mirrors:
-	--- Update mirrors first:
-	   |--- sudo pacman -Sy
-
-	--- Install 'rankmirrors':
-	   |--- sudo pacman -S pacman-contrib
-   
-	--- Backup existing mirror file:
-	   |--- cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-	
-	--- Rank fastest mirrors:
-	   |--- rankmirrors -n 13 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+    > mount /dev/sda1 /mnt/boot   
+    
+    # Before mounting make sure that the encrypted device is already open using the 'cryptsetup open /dev/sda2 luks' command!
+    > mount -t ext4 /dev/mapper/luks /mnt
+     
+    --- Tip: Test the partitions by unmounting and remounting:
+        > umount /mnt
+        > cryptsetup close name
+        > cryptsetup open /dev/sda2 luks
+        > mount -t ext4 /dev/mapper/luks /mnt
 
 
 Step 5:
 ------
+Ranking mirrors using 'Reflector': (https://wiki.archlinux.org/index.php/Reflector)
+    Sorts the most recent 13 links wrt to their speed:
+    > reflector --verbose --latest 13 --sort rate --save /etc/pacman.d/mirrorlist
 
+
+Step 6: (Install Packages)
+------
 --- Install arch linux:
     > pacstrap /mnt base base-devel linux linux-firmware vim git
 
 
-Step 6:
+Step 7: (Update File System Table)
 ------
-
 --- Generate file system table:
     > genfstab -p -U /mnt >> /mnt/etc/fstab
 
 
-Step 7:
+Step 8:
 ------
 --- Change to root:
     > arch-chroot /mnt
 
 
-Step 8:
+Step 9: (Time zone and Locale)
 ------
-
 --- Set time zone:
     > ln -sf /usr/share/zoneinfo/Asia/Karachi /etc/localtime
     > hwclock --systohc
@@ -141,8 +146,7 @@ Step 8:
     > export LANG=en_US.UTF-8
 
 
-
-Step 9: (Setup GRUB)
+Step 10: (Setup GRUB)
 ------
 
 --- Install GRUB:
@@ -152,14 +156,10 @@ Step 9: (Setup GRUB)
     > vim /etc/default/grub
     
     --- Change line 6 as follows:
-    > GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda2:luks root=/dev/mapper/vg-root"
+        > GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda2:luks root=/dev/mapper/luks"
 
-
-    --- Change line 52 in /etc/mkinitcpio.conf as follows. Add encrypt and lvm2 between blocks and filesystem:
-        > HOOKS=(base udev autodetect modconf block encrypt lvm2 filesystems keyboard fsck)
-
-    --- Install lvm2 :
-        > pacman -S lvm2
+    --- Change line 52 in /etc/mkinitcpio.conf as follows. Add encrypt between block and filesystem:
+        > HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)
 
     --- Run:
         > mkinitcpio -p linux
@@ -171,13 +171,13 @@ Step 9: (Setup GRUB)
     > grub-mkconfig -o /boot/grub/grub.cfg
 
 
-Step 10:
+Step 11: (Create users)
 -------
 --- Add user and assign password:
-    > useradd -m -g wheel fakhir
-    > passwd fakhir
+    > useradd -m -g wheel $USER
+    > passwd $USER
 
---- Add fakhir to super users. Edit /etc/sudoers file using visudo:
+--- Add $USER to super users. Edit /etc/sudoers file using visudo:
     > visudo
     * Uncomment the following line:
     > # %wheel ALL=(ALL) ALL
@@ -203,7 +203,6 @@ Step 11: (Swap file)
 
 
 
-
 Step 12: (Network Configuration)
 -------
 
@@ -219,10 +218,8 @@ Step 12: (Network Configuration)
     > systemctl enable NetworkManager
 
 
-
 Step 13:
 ------- 
-
     > exit
     > umount -a
     > reboot
@@ -257,9 +254,35 @@ Post Installation Settings:
        Then run alsamixer. Un-mute channels using (m) key
        https://www.youtube.com/watch?v=3cuuLQ19WTA
        
+  |--- pulse audio volume GUI:
+       > sudo pacman -S pavucontrol
+       
   
 --- Enable Boot Messages:
    |--- https://bbs.archlinux.org/viewtopic.php?id=213815
+
+
+--- Install "PCManFM" file manager
+    |--- install "gvfs" to support trash can and USB ausomount support
+
+
+------------------------------------------------------------------------
+
+CUPS service Issue with Arch:
+
+
+
+---- AS OF OCT 2014 -----
+ArchWiki wrote:
+
+    For cups 2.0.0, the service name has been changed to org.cups.cupsd.service 
+    instead of cups.service. This package is available in extra from October 31, 2014. 
+    When upgrading to version 2.0.0, it is necessary to manually disable the old 
+    service, otherwise broken symbolic links will be left in /etc/systemd/system/ 
+    subdirectories and systemd will warn about non-existent services.
+
+
+> systemctl enable org.cups.cupsd.service 
 
 
 
