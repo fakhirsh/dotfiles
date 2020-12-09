@@ -79,6 +79,9 @@ pacstrap /mnt base base-devel linux linux-firmware
 echo "Updating Filesystem Table"
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
+
+#   Idea taken from:
+#   https://www.reddit.com/r/archlinux/comments/bssbze/scripting_into_chroot/
 echo "Changing to root"
 arch-chroot /mnt /bin/bash <<EOF
 echo ""
